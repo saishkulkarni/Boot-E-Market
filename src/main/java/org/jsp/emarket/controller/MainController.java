@@ -5,14 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
-
+	
 	@GetMapping("/")
-	public String firstPage() {
-		return "redirect:/home";
-	}
-
-	@GetMapping("/home")
-	public String gotoHome() {
+	public String gotoHome()
+	{
 		return "Home";
 	}
+
 }

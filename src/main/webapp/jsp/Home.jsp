@@ -1,24 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
+
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="ISO-8859-1">
-<title>Home</title>
-
-<link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.rtl.min.css">
-
+<title>E-Market</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
+
 <body>
-<div class="container">
 
-<h1>This is My Home Page</h1><br>
+	<div class="header">
+	</div>
 
-<a href="/admin/login" class="btn btn-success">Admin Login</a>
+	<div class="container">
+		<a href="/admin/login" class="btn btn-success">Admin</a> <a
+			href="/merchant/login" class="btn btn-warning">Merchant</a> <a
+			href="/customer/login" class="btn btn-danger">Customer</a>
+	</div>
 
-</div>
+	<div class="footer">
+	</div>
 
-
-<script type="text/javascript" src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.js"></script>
+	<script type="text/javascript"
+		src="/webjars/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 </body>
 </html>

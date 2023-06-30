@@ -4,18 +4,21 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Login</title>
+<title>Forgot Password</title>
 </head>
 <body>
+	<div class="header"></div>
+
 	<div class="container">
-	<h1>${fail}</h1>
-		<h2>This is Admin Login Page</h2>
-		<form action="/admin/login" method="post">
-			Email: <input type="text" name="email"><br> Password:<input
-				type="password" name="password"><br>
-			<button>Login</button>
+		<form action="">
+			Enter Email: <input type="email"><br>
+			<button>Send OTP</button>
 			<button type="reset">Cancel</button>
 		</form>
+		<br>
+		<br> <a href="/customer/login"><button>Back</button></a>
 	</div>
+
+	<div class="footer"></div>
 </body>
 </html>
