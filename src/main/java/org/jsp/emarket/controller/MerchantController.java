@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,4 +42,23 @@ public class MerchantController {
 	{
 		return merchantService.signup(model,merchant,date,pic);
 	}
+	
+	@PostMapping("/verify-otp/{email}")
+	public String verifyOtp(@PathVariable String email,@RequestParam int otp,ModelMap model)
+	{
+		return merchantService.verifyOtp(email,otp,model);
+	}
+	
+	@GetMapping("/resend-otp/{email}")
+	public String resendOtp(@PathVariable String email,ModelMap model)
+	{
+		return merchantService.resendOtp(email,model);
+	}
+	
+	@PostMapping("/forgotpassword")
+	public String sendForgotOtp(@RequestParam String email,ModelMap model)
+	{
+		return merchantService.sendForgotOtp(email,model);
+	}
+	
 }

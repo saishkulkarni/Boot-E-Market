@@ -19,8 +19,8 @@ public class MerchantDao {
 		return merchantRepository.findByMobile(mobile);
 	}
 
-	public void save(Merchant merchant) {
-		merchantRepository.save(merchant);
+	public Merchant save(Merchant merchant) {
+		return merchantRepository.save(merchant);
 	}
 
 }

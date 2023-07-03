@@ -21,4 +21,5 @@ public class Customer {
 	private String gender;
 	private String address;
 	private int otp;
+	private boolean status;
 }

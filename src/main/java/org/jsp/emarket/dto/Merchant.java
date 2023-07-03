@@ -23,6 +23,7 @@ public class Merchant {
 	private String gender;
 	private String address;
 	private int otp;
+	private boolean status;
 
 	@Lob
 	@Column(columnDefinition = "MEDIUMBLOB")

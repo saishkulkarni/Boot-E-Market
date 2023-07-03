@@ -22,7 +22,7 @@ Gender:
 <input type="radio" name="gender" value="male">Male
 <input type="radio" name="gender" value="female">Female<br>
 Picture: <input type="file" name="pic"><br>
-Address: <textarea rows="5" cols="30"></textarea> <br>
+Address: <textarea rows="5" cols="30" name="address"></textarea> <br>
 <button>Signup</button><button type="reset">Cancel</button>
 </form>
 <br><br>

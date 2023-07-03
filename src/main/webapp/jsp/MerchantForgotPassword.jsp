@@ -12,8 +12,8 @@
 </div>
 
 <div class="container">
-<form action="">
-Enter Email: <input type="email"><br>
+<form action="/merchant/forgotpassword" method="post">
+Enter Email: <input type="email" name="email"><br>
 <button>Send OTP</button><button type="reset">Cancel</button>
 </form>
 <br><br>
