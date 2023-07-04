@@ -20,6 +20,6 @@ public class Customer {
 	private LocalDate dob;
 	private String gender;
 	private String address;
-	private int otp;
+	private String token;
 	private boolean status;
 }

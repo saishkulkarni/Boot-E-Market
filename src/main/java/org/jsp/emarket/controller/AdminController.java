@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -23,8 +25,8 @@ public class AdminController {
 	}
 	
 	@PostMapping("/login")
-	public String login(Login login,ModelMap model)
+	public String login(Login login,ModelMap model,HttpSession session)
 	{
-		return adminService.login(login,model); 
+		return adminService.login(login,model,session); 
 	}
 }

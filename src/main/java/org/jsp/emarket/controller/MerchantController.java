@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/merchant")
 public class MerchantController {
-	
+
 	@Autowired
 	MerchantService merchantService;
 
@@ -36,29 +37,46 @@ public class MerchantController {
 	public String gotoSignup() {
 		return "MerchantSignup";
 	}
-	
+
 	@PostMapping("/signup")
-	public String signup(ModelMap model,Merchant merchant,@RequestParam String date,@RequestParam MultipartFile pic) throws IOException
-	{
-		return merchantService.signup(model,merchant,date,pic);
+	public String signup(ModelMap model, Merchant merchant, @RequestParam String date, @RequestParam MultipartFile pic)
+			throws IOException {
+		return merchantService.signup(model, merchant, date, pic);
 	}
-	
+
 	@PostMapping("/verify-otp/{email}")
-	public String verifyOtp(@PathVariable String email,@RequestParam int otp,ModelMap model)
-	{
-		return merchantService.verifyOtp(email,otp,model);
+	public String verifyOtp(@PathVariable String email, @RequestParam int otp, ModelMap model) {
+		return merchantService.verifyOtp(email, otp, model);
 	}
-	
+
 	@GetMapping("/resend-otp/{email}")
-	public String resendOtp(@PathVariable String email,ModelMap model)
-	{
-		return merchantService.resendOtp(email,model);
+	public String resendOtp(@PathVariable String email, ModelMap model) {
+		return merchantService.resendOtp(email, model);
 	}
-	
+
 	@PostMapping("/forgotpassword")
-	public String sendForgotOtp(@RequestParam String email,ModelMap model)
-	{
-		return merchantService.sendForgotOtp(email,model);
+	public String sendForgotOtp(@RequestParam String email, ModelMap model) {
+		return merchantService.sendForgotOtp(email, model);
 	}
-	
+
+	@PostMapping("/forgot-otp/{email}")
+	public String submitForgotOtp(@PathVariable String email, @RequestParam int otp, ModelMap model) {
+		return merchantService.submitForgotOtp(email, otp, model);
+	}
+
+	@GetMapping("/resend-forgot-otp/{email}")
+	public String resendForgotOtp(@PathVariable String email, ModelMap model) {
+		return merchantService.resendForgotOtp(email, model);
+	}
+
+	@PostMapping("/reset-password")
+	public String setPassword(@RequestParam String email, @RequestParam String password, ModelMap model) {
+		return merchantService.setPassword(email, password, model);
+	}
+
+	@PostMapping("/login")
+	public String login(@RequestParam String email, @RequestParam String password, ModelMap model,
+			HttpSession session) {
+		return merchantService.login(email, password, model, session);
+	}
 }

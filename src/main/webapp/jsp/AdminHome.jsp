@@ -8,15 +8,13 @@
 </head>
 <body>
 
-	<div class="header">
-	</div>
+	<div class="header"></div>
 
 	<div class="container">
-	<h1>${pass}</h1>
+		${pass} <br> <a href="/logout"><button>Logout</button></a>
 	</div>
-	
-	<div class="footer">
-	</div>
+
+	<div class="footer"></div>
 
 	<script type="text/javascript"
 		src="/webjars/bootstrap/5.3.0/js/bootstrap.min.js"></script>
