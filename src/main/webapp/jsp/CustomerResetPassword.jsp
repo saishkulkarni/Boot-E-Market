@@ -7,10 +7,10 @@
 <title>Enter New Password</title>
 </head>
 <body>
-<h1>Hello ${merchant.getName()} your OTP Verification is Success</h1>
+<h1>Hello ${customer.getName()} your OTP Verification is Success</h1>
 <h2>Enter New Password</h2>
-<form action="/merchant/reset-password" method="post">
-<input type="hidden" name="email" value="${merchant.getEmail()}" required="required">
+<form action="/customer/reset-password" method="post">
+<input type="hidden" name="email" value="${customer.getEmail()}" required="required">
 <input type="password" name="password">
 <button>Reset Password</button><button type="reset">Cancel</button>
 </form>

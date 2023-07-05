@@ -10,9 +10,10 @@
 	<div class="header"></div>
 
 	<div class="container">
-		<form action="">
-			Enter Email: <input type="email"><br>
-			<button>Send OTP</button>
+	${fail }
+		<form action="/customer/forgot-link" method="post">
+			Enter Email: <input type="email" name="email"><br>
+			<button>Send Link</button>
 			<button type="reset">Cancel</button>
 		</form>
 		<br>

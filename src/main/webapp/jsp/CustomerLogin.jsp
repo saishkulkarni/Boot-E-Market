@@ -15,6 +15,7 @@
 
 	<div class="container">
 		<h1>${fail}</h1>
+		<h1>${pass}</h1>
 		<form action="/customer/login" method="post">
 			Email: <input type="text" name="email"><br> Password: <input
 				type="password" name="password"><br>
