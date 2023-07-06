@@ -14,19 +14,17 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	
+
 	@Autowired
 	AdminService adminService;
 
 	@GetMapping("/login")
-	public String gotoLogin(ModelMap model)
-	{
+	public String gotoLogin(ModelMap model) {
 		return "AdminLogin";
 	}
-	
+
 	@PostMapping("/login")
-	public String login(Login login,ModelMap model,HttpSession session)
-	{
-		return adminService.login(login,model,session); 
+	public String login(Login login, ModelMap model, HttpSession session) {
+		return adminService.login(login, model, session);
 	}
 }

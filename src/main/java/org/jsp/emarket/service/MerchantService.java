@@ -2,10 +2,13 @@ package org.jsp.emarket.service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.jsp.emarket.dao.MerchantDao;
 import org.jsp.emarket.dto.Merchant;
+import org.jsp.emarket.dto.Product;
 import org.jsp.emarket.helper.SendMail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -151,13 +154,11 @@ public class MerchantService {
 			return "MerchantLogin";
 		} else {
 			if (merchant.getPassword().equals(password)) {
-				if(merchant.isStatus())
-				{
-				session.setAttribute("merchant", merchant);
-				model.put("pass", "Login Success");
-				return "MerchantHome";
-				}
-				else {
+				if (merchant.isStatus()) {
+					session.setAttribute("merchant", merchant);
+					model.put("pass", "Login Success");
+					return "MerchantHome";
+				} else {
 					model.put("fail", "Mail verification Pending, Click on Forgot password and verify otp");
 					return "MerchantLogin";
 				}
@@ -165,6 +166,46 @@ public class MerchantService {
 				model.put("fail", "Incorrect Password");
 				return "MerchantLogin";
 			}
+		}
+	}
+
+	public String addProduct(Product product, ModelMap model, MultipartFile pic, HttpSession session)
+			throws IOException {
+		Merchant merchant = (Merchant) session.getAttribute("merchant");
+
+		byte[] image = new byte[pic.getInputStream().available()];
+		pic.getInputStream().read(image);
+
+		product.setImage(image);
+		product.setName(merchant.getName() + "-" + product.getName());
+
+		Product product2 = merchantDao.findProductByName(product.getName());
+		if (product2 != null) {
+			product.setId(product2.getId());
+			product.setQuantity(product.getQuantity() + product2.getQuantity());
+		}
+
+		List<Product> products = merchant.getProducts();
+		if (products == null) {
+			products = new ArrayList<>();
+		}
+		products.add(product);
+		merchant.setProducts(products);
+
+		session.setAttribute("merchant", merchantDao.save(merchant));
+		model.put("pass", "Product Added Successfully");
+		return "MerchantHome";
+	}
+
+	public String fetchAllProducts(HttpSession session, ModelMap model) {
+		Merchant merchant = (Merchant) session.getAttribute("merchant");
+
+		if (merchant.getProducts() == null || merchant.getProducts().isEmpty()) {
+			model.put("fail", "Products Not Found");
+			return "MerchantHome";
+		} else {
+			model.put("products", merchant.getProducts());
+			return "MerchantDisplayProduct";
 		}
 	}
 

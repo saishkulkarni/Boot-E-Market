@@ -3,6 +3,7 @@ package org.jsp.emarket.controller;
 import java.io.IOException;
 
 import org.jsp.emarket.dto.Merchant;
+import org.jsp.emarket.dto.Product;
 import org.jsp.emarket.service.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,5 +79,45 @@ public class MerchantController {
 	public String login(@RequestParam String email, @RequestParam String password, ModelMap model,
 			HttpSession session) {
 		return merchantService.login(email, password, model, session);
+	}
+	
+	@GetMapping("/product-add")
+	public String gotoAddProductPage(HttpSession session,ModelMap model)
+	{
+		if(session.getAttribute("merchant")==null)
+		{
+			model.put("fail", "Session Expied Login Again");
+			return "MerchantLogin";
+		}
+		else {
+			model.put("merchant", session.getAttribute("merchant"));
+			return "AddProduct";
+		}
+	}
+	
+	@PostMapping("/product-add")
+	public String addProduct(HttpSession session,ModelMap model,Product product,@RequestParam MultipartFile pic) throws IOException
+	{
+		if(session.getAttribute("merchant")==null)
+		{
+			model.put("fail", "Session Expied Login Again");
+			return "MerchantLogin";
+		}
+		else {
+			return merchantService.addProduct(product,model,pic,session);
+		}
+	}
+	
+	@GetMapping("/product-view")
+	public String fetchAllProducts(HttpSession session,ModelMap model)
+	{
+		if(session.getAttribute("merchant")==null)
+		{
+			model.put("fail", "Session Expied Login Again");
+			return "MerchantLogin";
+		}
+		else {
+			return merchantService.fetchAllProducts(session,model);
+		}
 	}
 }

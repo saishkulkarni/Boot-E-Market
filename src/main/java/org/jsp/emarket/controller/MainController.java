@@ -8,16 +8,14 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MainController {
-	
+
 	@GetMapping("/")
-	public String gotoHome()
-	{
+	public String gotoHome() {
 		return "Home";
 	}
-	
+
 	@GetMapping("/logout")
-	public String logout(HttpSession session,ModelMap model)
-	{
+	public String logout(HttpSession session, ModelMap model) {
 		session.invalidate();
 		model.put("fail", "Logout Success");
 		return "Home";

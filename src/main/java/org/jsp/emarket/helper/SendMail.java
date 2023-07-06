@@ -60,11 +60,12 @@ public class SendMail {
 			else
 				gender = "Ms. ";
 
-			String link="http://localhost:8055/customer/verify-otp/"+customer.getEmail()+"/"+customer.getToken();
-					;
+			String link = "http://localhost:8055/customer/verify-otp/" + customer.getEmail() + "/"
+					+ customer.getToken();
+			;
 			String content = "<h1>Hello " + gender + " " + customer.getName() + ",<h1>"
 					+ "<h1>Thank you for showing interest in creating an account with us we look forward to collabrate click the below link to verify your account</h1>"
-					+ "<h1>Link: <a href='"+link+"'>Click</a> </h1>";
+					+ "<h1>Link: <a href='" + link + "'>Click</a> </h1>";
 
 			helper.setText(content, true);
 			mailSender.send(mimeMessage);
@@ -90,11 +91,12 @@ public class SendMail {
 			else
 				gender = "Ms. ";
 
-			String link="http://localhost:8055/customer/reset-password/"+customer.getEmail()+"/"+customer.getToken();
-					;
+			String link = "http://localhost:8055/customer/reset-password/" + customer.getEmail() + "/"
+					+ customer.getToken();
+			;
 			String content = "<h1>Hello " + gender + " " + customer.getName() + ",<h1>"
 					+ "<h1>Thank you for showing interest in creating an account with us we look forward to collabrate click the below link to verify your account</h1>"
-					+ "<h1>Link: <a href='"+link+"'>Click</a> </h1>";
+					+ "<h1>Link: <a href='" + link + "'>Click</a> </h1>";
 
 			helper.setText(content, true);
 			mailSender.send(mimeMessage);

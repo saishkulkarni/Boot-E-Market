@@ -10,14 +10,13 @@
 	<div class="header"></div>
 
 	<div class="container">
-	${fail }
+		${fail }
 		<form action="/customer/forgot-link" method="post">
 			Enter Email: <input type="email" name="email"><br>
 			<button>Send Link</button>
 			<button type="reset">Cancel</button>
 		</form>
-		<br>
-		<br> <a href="/customer/login"><button>Back</button></a>
+		<br> <br> <a href="/customer/login"><button>Back</button></a>
 	</div>
 
 	<div class="footer"></div>

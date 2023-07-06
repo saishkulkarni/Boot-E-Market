@@ -4,14 +4,17 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>${name}Home</title>
+<title>Admin Home</title>
 </head>
 <body>
 
 	<div class="header"></div>
 
 	<div class="container">
-		${pass} <br> <a href="/logout"><button>Logout</button></a>
+		${pass} <br>
+		<a href="/admin/product-approve"><button>Approve Product</button></a>
+		<br>
+		<a href="/logout"><button>Logout</button></a>
 	</div>
 
 	<div class="footer"></div>
