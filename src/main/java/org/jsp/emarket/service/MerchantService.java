@@ -209,4 +209,20 @@ public class MerchantService {
 		}
 	}
 
+	public String deleteProduct(HttpSession session, ModelMap model, int id) {
+		Product product=merchantDao.findProductById(id);
+		Merchant merchant=(Merchant) session.getAttribute("merchant");
+		merchant.getProducts().remove(product);
+		merchantDao.save(merchant);
+		merchantDao.removeProduct(product);
+		model.put("pass", "Deleted Successfully");
+		if (merchant.getProducts() == null || merchant.getProducts().isEmpty()) {
+			model.put("fail", "Products Not Found");
+			return "MerchantHome";
+		} else {
+			model.put("products", merchant.getProducts());
+			return "MerchantDisplayProduct";
+		}
+	}
+
 }

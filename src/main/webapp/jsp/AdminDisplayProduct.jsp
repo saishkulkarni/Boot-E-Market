@@ -2,15 +2,15 @@
 <%@page import="org.jsp.emarket.dto.Product"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Products</title>
+<title>Admin Display Products</title>
 </head>
 <body>
-	<%
+<%
 	List<Product> products = (List<Product>) request.getAttribute("products");
 	%>
 	<h1>Product Details</h1>
@@ -22,8 +22,8 @@
 			<th>Price</th>
 			<th>Stock</th>
 			<th>Description</th>
-			<th>Delete</th>
-			<th>Update</th>
+			<th>Status</th>
+			<th>Change Status</th>
 		</tr>
 		<%
 		for (Product product : products) {
@@ -40,8 +40,8 @@
 			<th><%=product.getPrice()%></th>
 			<th><%=product.getQuantity()%></th>
 			<th><%=product.getDescription()%></th>
-			<th><a href="/merchant/product-delete/<%=product.getId()%>"><button>Delete</button></a></th>
-			<th><a href="/merchant/product-update/<%=product.getId()%>"><button>Update</button></a></th>
+			<th><%=product.isStatus() %></th>
+			<th><button>Change</button></th>
 		</tr>
 
 		<%

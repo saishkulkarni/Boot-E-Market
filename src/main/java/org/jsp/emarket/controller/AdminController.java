@@ -27,4 +27,18 @@ public class AdminController {
 	public String login(Login login, ModelMap model, HttpSession session) {
 		return adminService.login(login, model, session);
 	}
+	
+	@GetMapping("/product-approve")
+	public String viewAllProducts(HttpSession session,ModelMap model)
+	{
+
+		if(session.getAttribute("admin")==null)
+		{
+			model.put("fail", "Session Expied Login Again");
+			return "AdminLogin";
+		}
+		else {
+			return adminService.fetchAllProducts(model);
+		}
+	}
 }

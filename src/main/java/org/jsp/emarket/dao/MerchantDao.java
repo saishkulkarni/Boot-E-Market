@@ -12,7 +12,7 @@ public class MerchantDao {
 
 	@Autowired
 	MerchantRepository merchantRepository;
-	
+
 	@Autowired
 	ProductRepository productRepository;
 
@@ -30,6 +30,14 @@ public class MerchantDao {
 
 	public Product findProductByName(String name) {
 		return productRepository.findByName(name);
+	}
+
+	public Product findProductById(int id) {
+		return productRepository.findById(id).orElse(null);
+	}
+
+	public void removeProduct(Product product) {
+		productRepository.delete(product);
 	}
 
 }

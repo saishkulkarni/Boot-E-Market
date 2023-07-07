@@ -1,6 +1,11 @@
 package org.jsp.emarket.service;
 
+import java.util.List;
+
+import org.jsp.emarket.dto.Product;
 import org.jsp.emarket.helper.Login;
+import org.jsp.emarket.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
@@ -8,6 +13,9 @@ import jakarta.servlet.http.HttpSession;
 
 @Service
 public class AdminService {
+	
+	@Autowired
+	ProductRepository productRepository;
 
 	public String login(Login login, ModelMap model, HttpSession session) {
 		model.put("name", "Admin");
@@ -23,6 +31,19 @@ public class AdminService {
 			model.put("fail", "Incorrect Email");
 		}
 		return "AdminLogin";
+	}
+
+	public String fetchAllProducts(ModelMap model) {
+		List<Product> list=productRepository.findAll();
+		if(list.isEmpty())
+		{
+			model.put("fail", "No Products Found");
+			return "AdminHome";
+		}
+		else {
+			model.put("products", list);
+			return "AdminDisplayProduct";
+		}
 	}
 
 }

@@ -120,4 +120,19 @@ public class MerchantController {
 			return merchantService.fetchAllProducts(session,model);
 		}
 	}
+	
+	@GetMapping("/product-delete/{id}")
+	public String fetchAllProducts(@PathVariable int id,HttpSession session,ModelMap model)
+	{
+		if(session.getAttribute("merchant")==null)
+		{
+			model.put("fail", "Session Expied Login Again");
+			return "MerchantLogin";
+		}
+		else {
+			return merchantService.deleteProduct(session,model,id);
+		}
+	}
+	
+	
 }
