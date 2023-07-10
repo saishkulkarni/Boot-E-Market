@@ -13,6 +13,7 @@
 	<%
 	List<Product> products = (List<Product>) request.getAttribute("products");
 	%>
+	${pass}
 	<h1>Product Details</h1>
 	<table border="2px solid black">
 		<tr>
@@ -48,6 +49,6 @@
 		}
 		%>
 	</table>
-
+<a href="/jsp/MerchantHome.jsp"><button>Back</button></a>
 </body>
 </html>

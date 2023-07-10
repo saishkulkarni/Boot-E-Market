@@ -10,6 +10,7 @@ import org.jsp.emarket.dao.MerchantDao;
 import org.jsp.emarket.dto.Merchant;
 import org.jsp.emarket.dto.Product;
 import org.jsp.emarket.helper.SendMail;
+import org.jsp.emarket.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
@@ -19,6 +20,9 @@ import jakarta.servlet.http.HttpSession;
 
 @Service
 public class MerchantService {
+
+	@Autowired
+	ProductRepository productRepository;
 
 	@Autowired
 	MerchantDao merchantDao;
@@ -210,8 +214,8 @@ public class MerchantService {
 	}
 
 	public String deleteProduct(HttpSession session, ModelMap model, int id) {
-		Product product=merchantDao.findProductById(id);
-		Merchant merchant=(Merchant) session.getAttribute("merchant");
+		Product product = merchantDao.findProductById(id);
+		Merchant merchant = (Merchant) session.getAttribute("merchant");
 		merchant.getProducts().remove(product);
 		merchantDao.save(merchant);
 		merchantDao.removeProduct(product);
@@ -221,6 +225,31 @@ public class MerchantService {
 			return "MerchantHome";
 		} else {
 			model.put("products", merchant.getProducts());
+			model.put("pass", "Deleted Success");
+			return "MerchantDisplayProduct";
+		}
+	}
+
+	public String updateProduct(ModelMap model, int id) {
+		Product product = merchantDao.findProductById(id);
+		model.put("product", product);
+		return "MerchantUpdateProduct";
+	}
+
+	public String updateProduct(ModelMap model, Product product, HttpSession session) {
+		product.setImage(merchantDao.findProductById(product.getId()).getImage());
+		product.setStatus(merchantDao.findProductById(product.getId()).isStatus());
+		productRepository.save(product);
+		model.put("pass", "Product UpdatedSuccessfully");
+		Merchant merchant1=(Merchant) session.getAttribute("merchant");
+		Merchant merchant=merchantDao.findByEmail(merchant1.getEmail());
+		session.setAttribute("merchant", merchant);
+		if (merchant.getProducts() == null || merchant.getProducts().isEmpty()) {
+			model.put("fail", "Products Not Found");
+			return "MerchantHome";
+		} else {
+			model.put("products", merchant.getProducts());
+			model.put("pass", "Updated Success");
 			return "MerchantDisplayProduct";
 		}
 	}

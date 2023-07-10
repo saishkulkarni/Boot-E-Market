@@ -13,7 +13,11 @@
 	<div class="container">
 		${pass} <br>
 		<a href="/admin/product-approve"><button>Approve Product</button></a>
-		<br>
+	
+		<a href="/admin/customer-view"><button>View All Customer</button></a>
+		
+		<a href="/admin/merchant-view"><button>View All Merchant</button></a>
+		
 		<a href="/logout"><button>Logout</button></a>
 	</div>
 

@@ -8,6 +8,8 @@
 </head>
 <body>
 	${pass}
+	<br>
+	<a href="/customer/products-view"><button>View Products</button></a>
 	<a href="/logout"><button>Logout</button></a>
 </body>
 </html>

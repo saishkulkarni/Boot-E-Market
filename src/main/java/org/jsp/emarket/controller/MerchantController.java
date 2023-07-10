@@ -122,7 +122,7 @@ public class MerchantController {
 	}
 	
 	@GetMapping("/product-delete/{id}")
-	public String fetchAllProducts(@PathVariable int id,HttpSession session,ModelMap model)
+	public String deleteProduct(@PathVariable int id,HttpSession session,ModelMap model)
 	{
 		if(session.getAttribute("merchant")==null)
 		{
@@ -131,6 +131,32 @@ public class MerchantController {
 		}
 		else {
 			return merchantService.deleteProduct(session,model,id);
+		}
+	}
+	
+	@GetMapping("/product-update/{id}")
+	public String updateProduct(@PathVariable int id,HttpSession session,ModelMap model)
+	{
+		if(session.getAttribute("merchant")==null)
+		{
+			model.put("fail", "Session Expied Login Again");
+			return "MerchantLogin";
+		}
+		else {
+			return merchantService.updateProduct(model,id);
+		}
+	}
+	
+	@PostMapping("/product-update")
+	public String updateProduct(Product product,HttpSession session,ModelMap model)
+	{
+		if(session.getAttribute("merchant")==null)
+		{
+			model.put("fail", "Session Expied Login Again");
+			return "MerchantLogin";
+		}
+		else {
+			return merchantService.updateProduct(model,product,session);
 		}
 	}
 	
