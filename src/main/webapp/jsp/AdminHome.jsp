@@ -18,6 +18,8 @@
 		
 		<a href="/admin/merchant-view"><button>View All Merchant</button></a>
 		
+		<a href="/admin/payment-add"><button>Add Payment Method</button></a>
+		
 		<a href="/logout"><button>Logout</button></a>
 	</div>
 

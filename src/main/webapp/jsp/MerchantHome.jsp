@@ -13,6 +13,10 @@
 	
 	<a href="/merchant/product-view"><button>View All Products</button></a>
 	
+	<a href="/merchant/product-review"><button>Read Product Reviews</button></a>
+	
+	<a href="/merchant/product-faq"><button>Answer FAQ's</button></a>
+	
 	<a href="/logout"><button>Logout</button></a>
 </body>
 </html>

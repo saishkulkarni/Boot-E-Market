@@ -2,7 +2,7 @@
 <%@page import="org.jsp.emarket.dto.Product"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +10,7 @@
 <title>Admin Display Products</title>
 </head>
 <body>
-<%
+	<%
 	List<Product> products = (List<Product>) request.getAttribute("products");
 	%>
 	<h1>Product Details</h1>
@@ -40,14 +40,16 @@
 			<th><%=product.getPrice()%></th>
 			<th><%=product.getQuantity()%></th>
 			<th><%=product.getDescription()%></th>
-			<th><%=product.isStatus() %></th>
-			<th><button>Change</button></th>
+			<th><%if(product.isStatus())%>Approved<%else%>Not Approved</th>
+			<th><a href="/admin/product-changestatus/<%=product.getId()%>"><button>Change</button></a></th>
 		</tr>
 
 		<%
 		}
 		%>
 	</table>
-
+	<br>   
+	<br>
+	<a href="/jsp/AdminHome.jsp"><Button>Back</Button> </a>
 </body>
 </html>
