@@ -13,7 +13,7 @@ import lombok.Data;
 @Entity
 @Data
 @Component
-public class Product {
+public class Item {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +21,8 @@ public class Product {
 	private String name;
 	private double price;
 	private String description;
-	private int stock;
+	private int quantity;
 	@Lob
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private byte[] image;
-	private boolean status;
 }

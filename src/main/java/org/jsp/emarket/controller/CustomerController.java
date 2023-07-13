@@ -65,5 +65,22 @@ public class CustomerController {
 	public String setPassword(@RequestParam String email, @RequestParam String password, ModelMap model) {
 		return customerService.setPassword(email, password, model);
 	}
+	
+	@GetMapping("/products-view")
+	public String fetchAllProducts(ModelMap model,HttpSession session)
+	{
+		return customerService.fetchProducts(model,session);
+	}
+	@GetMapping("/cart-add/{id}")
+	public String addToCart(ModelMap model,HttpSession session,@PathVariable int id)
+	{
+		return customerService.addToCart(model,session,id);
+	}
+	
+	@GetMapping("/cart-view")
+	public String viewCart(ModelMap model,HttpSession session)
+	{
+		return customerService.viewCart(model,session);
+	}
 
 }

@@ -2,18 +2,17 @@
 <%@page import="org.jsp.emarket.dto.Product"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Products</title>
+<title>Insert title here</title>
 </head>
 <body>
 	<%
 	List<Product> products = (List<Product>) request.getAttribute("products");
 	%>
-	${pass}
 	<h1>Product Details</h1>
 	<table border="2px solid black">
 		<tr>
@@ -23,8 +22,8 @@
 			<th>Price</th>
 			<th>Stock</th>
 			<th>Description</th>
-			<th>Delete</th>
-			<th>Update</th>
+			<th>Add to Cart</th>
+			<th>Add to Wishlist</th>
 		</tr>
 		<%
 		for (Product product : products) {
@@ -41,14 +40,16 @@
 			<th><%=product.getPrice()%></th>
 			<th><%=product.getStock()%></th>
 			<th><%=product.getDescription()%></th>
-			<th><a href="/merchant/product-delete/<%=product.getId()%>"><button>Delete</button></a></th>
-			<th><a href="/merchant/product-update/<%=product.getId()%>"><button>Update</button></a></th>
+			<th><a href="/customer/cart-add/<%=product.getId()%>"><button>Add</button></a></th>
+			<th><a href="/customer/wishlist-add/<%=product.getId()%>"><button>Add</button></a></th>	
 		</tr>
 
 		<%
 		}
 		%>
 	</table>
-<a href="/jsp/MerchantHome.jsp"><button>Back</button></a>
+	<br>   
+	<br>
+	<a href="/jsp/CustomerHome.jsp"><Button>Back</Button> </a>
 </body>
 </html>

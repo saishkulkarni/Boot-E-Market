@@ -8,6 +8,7 @@
 </head>
 <body>
 	${pass}
+	${fail }
 	<br>
 	<a href="/customer/products-view"><button>View Products</button></a>
 	<a href="/customer/cart-view"><button>View Cart</button></a>

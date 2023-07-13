@@ -1,12 +1,18 @@
 package org.jsp.emarket.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.jsp.emarket.dao.CustomerDao;
 import org.jsp.emarket.dto.Customer;
+import org.jsp.emarket.dto.Item;
+import org.jsp.emarket.dto.Product;
+import org.jsp.emarket.dto.ShoppingCart;
 import org.jsp.emarket.helper.Login;
 import org.jsp.emarket.helper.SendMail;
+import org.jsp.emarket.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
@@ -20,7 +26,13 @@ public class CustomerService {
 	CustomerDao customerDao;
 
 	@Autowired
+	ProductRepository productRepository;
+
+	@Autowired
 	SendMail mail;
+
+	@Autowired
+	Item item;
 
 	public String signup(Customer customer, String date, ModelMap model) {
 		customer.setDob(LocalDate.parse(date));
@@ -119,6 +131,77 @@ public class CustomerService {
 
 		model.put("pass", "Password Reset Success");
 		return "CustomerLogin";
+	}
+
+	public String fetchProducts(ModelMap model, HttpSession session) {
+		List<Product> list = productRepository.findByStatus(true);
+		if (session.getAttribute("customer") == null) {
+			model.put("fail", "Session Expired Login Again");
+			return "CustomerLogin";
+		} else {
+			if (list.isEmpty()) {
+				model.put("fail", "No Products Present");
+				return "CustomerHome";
+			} else {
+				model.put("products", list);
+				return "CustomerDisplayProducts";
+			}
+		}
+	}
+
+	public String addToCart(ModelMap model, HttpSession session, int id) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to Add Product to Cart");
+			return "CustomerLogin";
+		} else {
+			Product product = productRepository.findById(id).orElse(null);
+
+			item.setDescription(product.getDescription());
+			item.setImage(product.getImage());
+			item.setName(product.getName());
+			item.setPrice(product.getPrice());
+			item.setQuantity(1);
+
+			ShoppingCart cart = customer.getShoppingCart();
+			if (cart == null) {
+				cart = new ShoppingCart();
+			}
+			List<Item> items = cart.getItems();
+			if (items == null) {
+				items = new ArrayList<>();
+			}
+			items.add(item);
+
+			cart.setItems(items);
+
+			customer.setShoppingCart(cart);
+
+			customerDao.save(customer);
+
+			model.put("pass", "Product Added Success");
+			return "CustomerHome";
+		}
+	}
+
+	public String viewCart(ModelMap model, HttpSession session) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Cart");
+			return "CustomerLogin";
+		} else {
+
+			if (customer.getShoppingCart() == null || customer.getShoppingCart().getItems() == null
+					|| customer.getShoppingCart().getItems().isEmpty()) {
+				model.put("fail", "No Items in cart");
+				return "CustomerHome";
+			} else {
+				List<Item> items = customer.getShoppingCart().getItems();
+				model.put("items", items);
+				return "CustomerDisplayCart";
+			}
+		}
+
 	}
 
 }

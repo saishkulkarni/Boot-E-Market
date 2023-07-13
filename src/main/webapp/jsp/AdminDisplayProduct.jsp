@@ -38,7 +38,7 @@
 				style="width: 100px; height: auto;">
 			</th>
 			<th><%=product.getPrice()%></th>
-			<th><%=product.getQuantity()%></th>
+			<th><%=product.getStock()%></th>
 			<th><%=product.getDescription()%></th>
 			<th><%if(product.isStatus())%>Approved<%else%>Not Approved</th>
 			<th><a href="/admin/product-changestatus/<%=product.getId()%>"><button>Change</button></a></th>

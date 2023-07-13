@@ -93,5 +93,5 @@ public class AdminController {
 		} else {
 			return adminService.addPaymentPage(payment,model);
 		}
-	}
+	}  
 }
