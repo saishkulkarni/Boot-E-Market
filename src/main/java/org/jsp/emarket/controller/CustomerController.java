@@ -82,5 +82,11 @@ public class CustomerController {
 	{
 		return customerService.viewCart(model,session);
 	}
+	
+	@GetMapping("/cart-remove/{id}")
+	public String removeFromCart(HttpSession session,ModelMap model,@PathVariable int id)
+	{
+		return customerService.removeFromCart(session,model,id);
+	}
 
 }

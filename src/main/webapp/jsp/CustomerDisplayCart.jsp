@@ -22,6 +22,7 @@
 			<th>Description</th>
 			<th>Quantity</th>
 			<th>Price</th>
+			<th>Remove</th>
 		</tr>
 		<%
 		for (Item item : items) {
@@ -38,10 +39,13 @@
 			<th><%=item.getDescription()%></th>
 			<th><%=item.getQuantity()%></th>
 			<th><%=item.getPrice()%></th>
+			<th><a href="/customer/cart-remove/<%=item.getId()%>"><button>Remove</button></a></th>
 		</tr>
 		<%
 		}
 		%>
 	</table>
+	<br>
+	<a href="/jsp/CustomerHome.jsp"><button>Back</button></a>
 </body>
 </html>

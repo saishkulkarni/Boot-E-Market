@@ -33,6 +33,9 @@ public class CustomerService {
 
 	@Autowired
 	Item item;
+	
+	@Autowired
+	ShoppingCart cart;
 
 	public String signup(Customer customer, String date, ModelMap model) {
 		customer.setDob(LocalDate.parse(date));
@@ -156,31 +159,67 @@ public class CustomerService {
 			return "CustomerLogin";
 		} else {
 			Product product = productRepository.findById(id).orElse(null);
-
-			item.setDescription(product.getDescription());
-			item.setImage(product.getImage());
-			item.setName(product.getName());
-			item.setPrice(product.getPrice());
-			item.setQuantity(1);
-
+			if(product.getStock()>=1)
+			{
 			ShoppingCart cart = customer.getShoppingCart();
 			if (cart == null) {
-				cart = new ShoppingCart();
+				cart = this.cart;
 			}
+
 			List<Item> items = cart.getItems();
+
 			if (items == null) {
-				items = new ArrayList<>();
+				items = new ArrayList<Item>();
 			}
-			items.add(item);
+
+			if (items.isEmpty()) {
+				item.setName(product.getName());
+				item.setPrice(product.getPrice());
+				item.setQuantity(1);
+				item.setDescription(product.getDescription());
+				item.setImage(product.getImage());
+				items.add(item);
+			} else {
+				boolean flag = false;
+				for (Item item : items) {
+					if (item.getName().equals(product.getName())) {
+						item.setQuantity(item.getQuantity() + 1);
+						item.setPrice(item.getPrice() + product.getPrice());
+						item.setDescription(product.getDescription());
+						item.setImage(product.getImage());
+						flag = false;
+						break;
+					} else {
+						flag = true;
+					}
+				}
+				if (flag) {
+					item.setName(product.getName());
+					item.setPrice(product.getPrice());
+					item.setQuantity(1);
+					item.setDescription(product.getDescription());
+					item.setImage(product.getImage());
+					items.add(item);
+				}
+
+			}
 
 			cart.setItems(items);
-
 			customer.setShoppingCart(cart);
-
-			customerDao.save(customer);
-
-			model.put("pass", "Product Added Success");
+			
+			product.setStock(product.getStock()-1);
+			productRepository.save(product);
+			
+			session.removeAttribute("customer");
+			session.setAttribute("customer", customerDao.save(customer));
+			
+			model.put("pass", "Product Added to Cart Success");
 			return "CustomerHome";
+			}
+			else {
+				model.put("fail", "Out of Stock");
+				return "CustomerHome";
+			}
 		}
 	}
 
@@ -204,4 +243,49 @@ public class CustomerService {
 
 	}
 
+	public String removeFromCart(HttpSession session, ModelMap model, int id) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "Invalid Session");
+			return "CustomerLogin";
+		} else {
+			List<Item> items=customer.getShoppingCart().getItems();
+			Item item=null;
+			boolean flag=false;
+			for(Item item1:items)
+			{
+				if(item1.getId()==id)
+				{
+					item=item1;
+					if(item1.getQuantity()>1)
+					{
+						item1.setQuantity(item1.getQuantity()-1);
+						break;
+					}
+					else {
+						flag=true;
+						break;
+					}
+				}
+			
+			}
+			if(flag)
+			{
+				items.remove(item);
+			}
+			
+			Product product=productRepository.findByName(item.getName());
+			product.setStock(product.getStock()+1);
+			productRepository.save(product);
+			
+			session.removeAttribute("customer");
+			session.setAttribute("customer", customerDao.save(customer));
+			
+			model.put("pass", "Product Removed from Cart Success");
+			return "CustomerHome";
+			
+			
+	}
+
+}
 }
