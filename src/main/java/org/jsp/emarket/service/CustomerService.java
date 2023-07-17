@@ -10,6 +10,7 @@ import org.jsp.emarket.dto.Customer;
 import org.jsp.emarket.dto.Item;
 import org.jsp.emarket.dto.Product;
 import org.jsp.emarket.dto.ShoppingCart;
+import org.jsp.emarket.dto.Wishlist;
 import org.jsp.emarket.helper.Login;
 import org.jsp.emarket.helper.SendMail;
 import org.jsp.emarket.repository.ProductRepository;
@@ -33,7 +34,7 @@ public class CustomerService {
 
 	@Autowired
 	Item item;
-	
+
 	@Autowired
 	ShoppingCart cart;
 
@@ -159,64 +160,62 @@ public class CustomerService {
 			return "CustomerLogin";
 		} else {
 			Product product = productRepository.findById(id).orElse(null);
-			if(product.getStock()>=1)
-			{
-			ShoppingCart cart = customer.getShoppingCart();
-			if (cart == null) {
-				cart = this.cart;
-			}
-
-			List<Item> items = cart.getItems();
-
-			if (items == null) {
-				items = new ArrayList<Item>();
-			}
-
-			if (items.isEmpty()) {
-				item.setName(product.getName());
-				item.setPrice(product.getPrice());
-				item.setQuantity(1);
-				item.setDescription(product.getDescription());
-				item.setImage(product.getImage());
-				items.add(item);
-			} else {
-				boolean flag = false;
-				for (Item item : items) {
-					if (item.getName().equals(product.getName())) {
-						item.setQuantity(item.getQuantity() + 1);
-						item.setPrice(item.getPrice() + product.getPrice());
-						item.setDescription(product.getDescription());
-						item.setImage(product.getImage());
-						flag = false;
-						break;
-					} else {
-						flag = true;
-					}
+			if (product.getStock() >= 1) {
+				ShoppingCart cart = customer.getShoppingCart();
+				if (cart == null) {
+					cart = this.cart;
 				}
-				if (flag) {
+
+				List<Item> items = cart.getItems();
+
+				if (items == null) {
+					items = new ArrayList<Item>();
+				}
+
+				if (items.isEmpty()) {
 					item.setName(product.getName());
 					item.setPrice(product.getPrice());
 					item.setQuantity(1);
 					item.setDescription(product.getDescription());
 					item.setImage(product.getImage());
 					items.add(item);
+				} else {
+					boolean flag = false;
+					for (Item item : items) {
+						if (item.getName().equals(product.getName())) {
+							item.setQuantity(item.getQuantity() + 1);
+							item.setPrice(item.getPrice() + product.getPrice());
+							item.setDescription(product.getDescription());
+							item.setImage(product.getImage());
+							flag = false;
+							break;
+						} else {
+							flag = true;
+						}
+					}
+					if (flag) {
+						item.setName(product.getName());
+						item.setPrice(product.getPrice());
+						item.setQuantity(1);
+						item.setDescription(product.getDescription());
+						item.setImage(product.getImage());
+						items.add(item);
+					}
+
 				}
 
-			}
+				cart.setItems(items);
+				customer.setShoppingCart(cart);
 
-			cart.setItems(items);
-			customer.setShoppingCart(cart);
-			
-			product.setStock(product.getStock()-1);
-			productRepository.save(product);
-			
-			session.removeAttribute("customer");
-			session.setAttribute("customer", customerDao.save(customer));
-			
-			model.put("pass", "Product Added to Cart Success");
-			return "CustomerHome";
-			}
-			else {
+				product.setStock(product.getStock() - 1);
+				productRepository.save(product);
+
+				session.removeAttribute("customer");
+				session.setAttribute("customer", customerDao.save(customer));
+
+				model.put("pass", "Product Added to Cart Success");
+				return "CustomerHome";
+			} else {
 				model.put("fail", "Out of Stock");
 				return "CustomerHome";
 			}
@@ -249,43 +248,117 @@ public class CustomerService {
 			model.put("fail", "Invalid Session");
 			return "CustomerLogin";
 		} else {
-			List<Item> items=customer.getShoppingCart().getItems();
-			Item item=null;
-			boolean flag=false;
-			for(Item item1:items)
-			{
-				if(item1.getId()==id)
-				{
-					item=item1;
-					if(item1.getQuantity()>1)
-					{
-						item1.setQuantity(item1.getQuantity()-1);
+			List<Item> items = customer.getShoppingCart().getItems();
+			Item item = null;
+			boolean flag = false;
+			for (Item item1 : items) {
+				if (item1.getId() == id) {
+					item = item1;
+					if (item1.getQuantity() > 1) {
+						item1.setPrice(item1.getPrice() - (item1.getPrice() / item1.getQuantity()));
+						item1.setQuantity(item1.getQuantity() - 1);
 						break;
-					}
-					else {
-						flag=true;
+					} else {
+						flag = true;
 						break;
 					}
 				}
-			
+
 			}
-			if(flag)
-			{
+			if (flag) {
 				items.remove(item);
 			}
-			
-			Product product=productRepository.findByName(item.getName());
-			product.setStock(product.getStock()+1);
+
+			Product product = productRepository.findByName(item.getName());
+			product.setStock(product.getStock() + 1);
 			productRepository.save(product);
-			
+
 			session.removeAttribute("customer");
 			session.setAttribute("customer", customerDao.save(customer));
-			
+
 			model.put("pass", "Product Removed from Cart Success");
 			return "CustomerHome";
-			
-			
+
+		}
+
 	}
 
-}
+	public String addToWishlist(ModelMap model, HttpSession session, int id) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to Add Product to Wishlist");
+			return "CustomerLogin";
+		} else {
+			model.put("id", id);
+			model.put("wishlists", customer.getWishlists());
+			return "SelectWishlist";
+		}
+	}
+
+	public String gotoWishlist(ModelMap model, HttpSession session, int id) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to Create Wishlist");
+			return "CustomerLogin";
+		} else {
+			model.put("id", id);
+			return "CreateWishlist";
+		}
+	}
+
+	public String createWishlist(ModelMap model, HttpSession session, int id, Wishlist wishlist) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to Create Wishlist");
+			return "CustomerLogin";
+		} else {
+			Product product = productRepository.findById(id).orElse(null);
+			List<Wishlist> list = customer.getWishlists();
+			if (list == null) {
+				list = new ArrayList<>();
+			}
+			if (product != null) {
+				List<Product> products = new ArrayList<>();
+				products.add(product);
+				wishlist.setProducts(products);
+
+				list.add(wishlist);
+
+				customer.setWishlists(list);
+
+				session.removeAttribute("customer");
+				session.setAttribute("customer", customerDao.save(customer));
+
+				model.put("pass", "WishList Creation Success and Product added to Wishlist");
+			} else {
+				list.add(wishlist);
+
+				customer.setWishlists(list);
+				session.removeAttribute("customer");
+				session.setAttribute("customer", customerDao.save(customer));
+
+				model.put("pass", "WishList Creation Success");
+			}
+			return "CustomerHome";
+		}
+	}
+
+	public String viewWishlist(ModelMap model, HttpSession session) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Wishlist");
+			return "CustomerLogin";
+		} else {
+			List<Wishlist> list=customer.getWishlists();
+			if(list==null || list.isEmpty())
+			{
+				model.put("fail","No Wishlist Found");
+				return "CustomerHome";
+			}
+			else {
+				model.put("list", list);
+				return "ViewWishlist";
+			}
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package org.jsp.emarket.controller;
 
 import org.jsp.emarket.dto.Customer;
+import org.jsp.emarket.dto.Wishlist;
 import org.jsp.emarket.helper.Login;
 import org.jsp.emarket.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,31 @@ public class CustomerController {
 	public String removeFromCart(HttpSession session,ModelMap model,@PathVariable int id)
 	{
 		return customerService.removeFromCart(session,model,id);
+	}
+	
+	@GetMapping("/wishlist-add/{id}")
+	public String addToWishlist(ModelMap model,HttpSession session,@PathVariable int id)
+	{
+		return customerService.addToWishlist(model,session,id);
+	}
+	
+	@GetMapping("/wishlist-create/{id}")
+	public String gotoWishlist(ModelMap model,HttpSession session,@PathVariable int id)
+	{
+		return customerService.gotoWishlist(model,session,id);
+	}
+	
+
+	@PostMapping("/wishlist-create/{id}")
+	public String createWishlist(ModelMap model,HttpSession session,@PathVariable int id,Wishlist wishlist)
+	{
+		return customerService.createWishlist(model,session,id,wishlist);
+	}
+	
+	@GetMapping("/wishlist-view")
+	public String viewWishlist(ModelMap model,HttpSession session)
+	{
+		return customerService.viewWishlist(model,session);
 	}
 
 }
