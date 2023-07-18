@@ -104,9 +104,9 @@ public class CustomerController {
 	
 
 	@PostMapping("/wishlist-create/{id}")
-	public String createWishlist(ModelMap model,HttpSession session,@PathVariable int id,Wishlist wishlist)
+	public String createWishlist(ModelMap model,HttpSession session,@PathVariable int id,@RequestParam String name)
 	{
-		return customerService.createWishlist(model,session,id,wishlist);
+		return customerService.createWishlist(model,session,id,name);
 	}
 	
 	@GetMapping("/wishlist-view")

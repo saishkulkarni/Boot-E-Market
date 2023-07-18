@@ -38,7 +38,7 @@ public class CustomerService {
 
 	@Autowired
 	ShoppingCart cart;
-	
+
 	@Autowired
 	WishlistRepository wishlistRepository;
 
@@ -310,17 +310,24 @@ public class CustomerService {
 		}
 	}
 
-	public String createWishlist(ModelMap model, HttpSession session, int id, Wishlist wishlist) {
+	public String createWishlist(ModelMap model, HttpSession session, int id, String name) {
 		Customer customer = (Customer) session.getAttribute("customer");
 		if (customer == null) {
 			model.put("fail", "First Login to Create Wishlist");
 			return "CustomerLogin";
 		} else {
+			
+			if(wishlistRepository.findByName(name)==null)
+			{
+			Wishlist wishlist = new Wishlist();
+			wishlist.setName(name);
+			
 			Product product = productRepository.findById(id).orElse(null);
 			List<Wishlist> list = customer.getWishlists();
 			if (list == null) {
 				list = new ArrayList<>();
 			}
+
 			if (product != null) {
 				List<Product> products = new ArrayList<>();
 				products.add(product);
@@ -335,6 +342,7 @@ public class CustomerService {
 
 				model.put("pass", "WishList Creation Success and Product added to Wishlist");
 			} else {
+
 				list.add(wishlist);
 
 				customer.setWishlists(list);
@@ -345,6 +353,12 @@ public class CustomerService {
 			}
 			return "CustomerHome";
 		}
+			else {
+				model.put("fail", "WishList Already Exists");
+				return "CustomerHome";
+			}
+		}
+		
 	}
 
 	public String viewWishlist(ModelMap model, HttpSession session) {
@@ -353,13 +367,11 @@ public class CustomerService {
 			model.put("fail", "First Login to view Wishlist");
 			return "CustomerLogin";
 		} else {
-			List<Wishlist> list=customer.getWishlists();
-			if(list==null || list.isEmpty())
-			{
-				model.put("fail","No Wishlist Found");
+			List<Wishlist> list = customer.getWishlists();
+			if (list == null || list.isEmpty()) {
+				model.put("fail", "No Wishlist Found");
 				return "CustomerHome";
-			}
-			else {
+			} else {
 				model.put("list", list);
 				return "ViewWishlist";
 			}
@@ -372,15 +384,13 @@ public class CustomerService {
 			model.put("fail", "First Login to view Wishlist");
 			return "CustomerLogin";
 		} else {
-			Wishlist wishlist=wishlistRepository.findById(id).orElse(null);
-			if( wishlist.getProducts()==null || wishlist.getProducts().isEmpty())
-			{
+			Wishlist wishlist = wishlistRepository.findById(id).orElse(null);
+			if (wishlist.getProducts() == null || wishlist.getProducts().isEmpty()) {
 				model.put("fail", "No items present");
 				return "CustomerHome";
-			}
-			else {
-			model.put("list",wishlist.getProducts());
-			return "ViewWishlistProducts";
+			} else {
+				model.put("list", wishlist.getProducts());
+				return "ViewWishlistProducts";
 			}
 		}
 	}
