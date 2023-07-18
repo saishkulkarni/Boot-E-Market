@@ -387,6 +387,7 @@ public class CustomerService {
 				model.put("fail", "No items present");
 				return "CustomerHome";
 			} else {
+				model.put("id",wishlist.getId());
 				model.put("list", wishlist.getProducts());
 				return "ViewWishlistProducts";
 			}
@@ -423,6 +424,22 @@ public class CustomerService {
 			} else {
 				model.put("pass", "Item Already Exists in Wishlist");
 			}
+			return "CustomerHome";
+		}
+	}
+
+	public String removeFromWishList(ModelMap model, HttpSession session, int wid, int pid) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Wishlist");
+			return "CustomerLogin";
+		} else {
+			Wishlist wishlist = wishlistRepository.findById(wid).orElse(null);
+			Product product = productRepository.findById(pid).orElse(null);
+			wishlist.getProducts().remove(product);
+			wishlistRepository.save(wishlist);
+
+			model.put("pass", "Item Removed from Wish list");
 			return "CustomerHome";
 		}
 	}

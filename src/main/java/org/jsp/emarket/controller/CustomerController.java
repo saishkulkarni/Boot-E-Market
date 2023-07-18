@@ -116,5 +116,11 @@ public class CustomerController {
 	{
 		return customerService.addToWishList(model, session, wid,pid);
 	}
+	
+	@GetMapping("/wishlist-remove/{wid}/{pid}")
+	public String removeFromWishList(@PathVariable int wid,@PathVariable int pid, ModelMap model, HttpSession session)
+	{
+		return customerService.removeFromWishList(model, session, wid,pid);
+	}
 
 }

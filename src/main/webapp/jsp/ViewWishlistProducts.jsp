@@ -23,6 +23,7 @@
 			<th>Stock</th>
 			<th>Description</th>
 			<th>Add to Cart</th>
+			<th>Remove</th>
 		</tr>
 		<%
 		for (Product product : products) {
@@ -40,6 +41,7 @@
 			<th><%=product.getStock()%></th>
 			<th><%=product.getDescription()%></th>
 			<th><a href="/customer/cart-add/<%=product.getId()%>"><button>Add</button></a></th>
+			<th><a href="/customer/wishlist-remove/${id}/<%=product.getId()%>"><button>Remove</button></a></th>
 		</tr>
 
 		<%
