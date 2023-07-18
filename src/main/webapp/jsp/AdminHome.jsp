@@ -11,7 +11,7 @@
 	<div class="header"></div>
 
 	<div class="container">
-		${pass} <br>
+		${pass} 	${fail} <br>
 		<a href="/admin/product-approve"><button>Approve Product</button></a>
 	
 		<a href="/admin/customer-view"><button>View All Customer</button></a>

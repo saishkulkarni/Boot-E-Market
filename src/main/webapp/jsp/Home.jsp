@@ -17,6 +17,7 @@
 
 	<div class="container">
 		<h1>${fail}</h1>
+		<h1>${pass}</h1>
 		<a href="/admin/login" class="btn btn-success">Admin</a> <a
 			href="/merchant/login" class="btn btn-warning">Merchant</a> <a
 			href="/customer/login" class="btn btn-danger">Customer</a>

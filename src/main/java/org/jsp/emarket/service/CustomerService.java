@@ -14,6 +14,7 @@ import org.jsp.emarket.dto.Wishlist;
 import org.jsp.emarket.helper.Login;
 import org.jsp.emarket.helper.SendMail;
 import org.jsp.emarket.repository.ProductRepository;
+import org.jsp.emarket.repository.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
@@ -37,6 +38,9 @@ public class CustomerService {
 
 	@Autowired
 	ShoppingCart cart;
+	
+	@Autowired
+	WishlistRepository wishlistRepository;
 
 	public String signup(Customer customer, String date, ModelMap model) {
 		customer.setDob(LocalDate.parse(date));
@@ -283,7 +287,7 @@ public class CustomerService {
 
 	}
 
-	public String addToWishlist(ModelMap model, HttpSession session, int id) {
+	public String loadWishlist(ModelMap model, HttpSession session, int id) {
 		Customer customer = (Customer) session.getAttribute("customer");
 		if (customer == null) {
 			model.put("fail", "First Login to Add Product to Wishlist");
@@ -358,6 +362,25 @@ public class CustomerService {
 			else {
 				model.put("list", list);
 				return "ViewWishlist";
+			}
+		}
+	}
+
+	public String viewWishlistProducts(int id, ModelMap model, HttpSession session) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Wishlist");
+			return "CustomerLogin";
+		} else {
+			Wishlist wishlist=wishlistRepository.findById(id).orElse(null);
+			if( wishlist.getProducts()==null || wishlist.getProducts().isEmpty())
+			{
+				model.put("fail", "No items present");
+				return "CustomerHome";
+			}
+			else {
+			model.put("list",wishlist.getProducts());
+			return "ViewWishlistProducts";
 			}
 		}
 	}

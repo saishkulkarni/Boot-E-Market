@@ -93,7 +93,7 @@ public class CustomerController {
 	@GetMapping("/wishlist-add/{id}")
 	public String addToWishlist(ModelMap model,HttpSession session,@PathVariable int id)
 	{
-		return customerService.addToWishlist(model,session,id);
+		return customerService.loadWishlist(model,session,id);
 	}
 	
 	@GetMapping("/wishlist-create/{id}")
@@ -113,6 +113,12 @@ public class CustomerController {
 	public String viewWishlist(ModelMap model,HttpSession session)
 	{
 		return customerService.viewWishlist(model,session);
+	}
+	
+	@GetMapping("/wishlist/product-view/{id}")
+	public String viewWishlistProducts(@PathVariable int id,ModelMap model,HttpSession session)
+	{
+		return customerService.viewWishlistProducts(id,model,session);
 	}
 
 }

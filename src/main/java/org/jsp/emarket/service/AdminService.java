@@ -88,7 +88,7 @@ public class AdminService {
 		List<Customer> list=customerRepository.findAll();
 		if(list.isEmpty())
 		{
-			model.put("fail", "No Products Found");
+			model.put("fail", "No Customer Data Found");
 			return "AdminHome";
 		}
 		else {
@@ -101,7 +101,7 @@ public class AdminService {
 		List<Merchant> list=merchantRepository.findAll();
 		if(list.isEmpty())
 		{
-			model.put("fail", "No Products Found");
+			model.put("fail", "No Merchant Data Found");
 			return "AdminHome";
 		}
 		else {
