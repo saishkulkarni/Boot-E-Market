@@ -18,7 +18,7 @@ if(wishlists!=null){
 	for(Wishlist wishlist:wishlists){
 %>
 <br>
-<a><button><%=wishlist.getName()%></button></a><br>
+<a href="/customer/wishlist-add/<%=wishlist.getId()%>/${id}"><button><%=wishlist.getName()%></button></a><br>
 
 <%} }%>
 

@@ -316,49 +316,47 @@ public class CustomerService {
 			model.put("fail", "First Login to Create Wishlist");
 			return "CustomerLogin";
 		} else {
-			
-			if(wishlistRepository.findByName(name)==null)
-			{
-			Wishlist wishlist = new Wishlist();
-			wishlist.setName(name);
-			
-			Product product = productRepository.findById(id).orElse(null);
-			List<Wishlist> list = customer.getWishlists();
-			if (list == null) {
-				list = new ArrayList<>();
-			}
 
-			if (product != null) {
-				List<Product> products = new ArrayList<>();
-				products.add(product);
-				wishlist.setProducts(products);
+			if (wishlistRepository.findByName(name) == null) {
+				Wishlist wishlist = new Wishlist();
+				wishlist.setName(name);
 
-				list.add(wishlist);
+				Product product = productRepository.findById(id).orElse(null);
+				List<Wishlist> list = customer.getWishlists();
+				if (list == null) {
+					list = new ArrayList<>();
+				}
 
-				customer.setWishlists(list);
+				if (product != null) {
+					List<Product> products = new ArrayList<>();
+					products.add(product);
+					wishlist.setProducts(products);
 
-				session.removeAttribute("customer");
-				session.setAttribute("customer", customerDao.save(customer));
+					list.add(wishlist);
 
-				model.put("pass", "WishList Creation Success and Product added to Wishlist");
+					customer.setWishlists(list);
+
+					session.removeAttribute("customer");
+					session.setAttribute("customer", customerDao.save(customer));
+
+					model.put("pass", "WishList Creation Success and Product added to Wishlist");
+				} else {
+
+					list.add(wishlist);
+
+					customer.setWishlists(list);
+					session.removeAttribute("customer");
+					session.setAttribute("customer", customerDao.save(customer));
+
+					model.put("pass", "WishList Creation Success");
+				}
+				return "CustomerHome";
 			} else {
-
-				list.add(wishlist);
-
-				customer.setWishlists(list);
-				session.removeAttribute("customer");
-				session.setAttribute("customer", customerDao.save(customer));
-
-				model.put("pass", "WishList Creation Success");
-			}
-			return "CustomerHome";
-		}
-			else {
 				model.put("fail", "WishList Already Exists");
 				return "CustomerHome";
 			}
 		}
-		
+
 	}
 
 	public String viewWishlist(ModelMap model, HttpSession session) {
@@ -392,6 +390,40 @@ public class CustomerService {
 				model.put("list", wishlist.getProducts());
 				return "ViewWishlistProducts";
 			}
+		}
+	}
+
+	public String addToWishList(ModelMap model, HttpSession session, int wid, int pid) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Wishlist");
+			return "CustomerLogin";
+		} else {
+			Wishlist wishlist = wishlistRepository.findById(wid).orElse(null);
+			Product product = productRepository.findById(pid).orElse(null);
+
+			List<Product> list = wishlist.getProducts();
+			if (list == null) {
+				list = new ArrayList<>();
+			}
+			boolean flag = true;
+			for (Product product2 : list) {
+				if (product2 == product) {
+					flag = false;
+					break;
+				}
+			}
+			if (flag) {
+				list.add(product);
+
+				wishlist.setProducts(list);
+				wishlistRepository.save(wishlist);
+
+				model.put("pass", "Item Added to Wish list");
+			} else {
+				model.put("pass", "Item Already Exists in Wishlist");
+			}
+			return "CustomerHome";
 		}
 	}
 }
