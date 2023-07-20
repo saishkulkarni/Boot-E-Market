@@ -46,6 +46,8 @@
 		%>
 	</table>
 	<br>
+	<a href=""><button>Checkout</button></a>
+	<br><br>
 	<a href="/jsp/CustomerHome.jsp"><button>Back</button></a>
 </body>
 </html>

@@ -122,5 +122,11 @@ public class CustomerController {
 	{
 		return customerService.removeFromWishList(model, session, wid,pid);
 	}
+	
+	@GetMapping("/wishlist-delete/{wid}")
+	public String removeWishList(@PathVariable int wid, ModelMap model, HttpSession session)
+	{
+		return customerService.removeWishList(model, session, wid);
+	}
 
 }

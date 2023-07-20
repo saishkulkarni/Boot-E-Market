@@ -12,7 +12,7 @@
 	<br>
 	<a href="/customer/products-view"><button>View Products</button></a>
 	<a href="/customer/cart-view"><button>View Cart</button></a>
-	<a href="/customer/wishlist-view"><button>View Wishlist</button></a>
+	<a href="/jsp/WishlistHome.jsp"><button>Wishlist</button></a>
 	<a href="/customer/orders-view"><button>View Orders</button></a>
 	<a href="/logout"><button>Logout</button></a>
 </body>

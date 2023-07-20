@@ -11,15 +11,33 @@
 <body>
 	<%
 	List<Wishlist> wishlists = (List<Wishlist>) request.getAttribute("list");
-
-	for (Wishlist wishlist : wishlists) {
 	%>
+
 	<br>
-	<a href="/customer/wishlist/product-view/<%=wishlist.getId()%>"><button><%=wishlist.getName()%></button></a>
+	<table border="2px">
+		<tr>
+			<th>WishList Name</th>
+			<th>View</th>
+			<th>Delete</th>
+		</tr>
+		<%
+		for (Wishlist wishlist : wishlists) {
+		%>
+		<tr>
+			<td><%=wishlist.getName()%></td>
+			<td><a
+				href="/customer/wishlist/product-view/<%=wishlist.getId()%>"><button>View</button></a></td>
+			<td><a
+				href="/customer/wishlist-delete/<%=wishlist.getId()%>"><button>Delete</button></a></td>
+		</tr>
+
+		<%
+		}
+		%>
+	</table>
+
+
 	<br>
 
-	<%
-	}
-	%>
 </body>
 </html>

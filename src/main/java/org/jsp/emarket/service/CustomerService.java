@@ -368,7 +368,7 @@ public class CustomerService {
 			List<Wishlist> list = customer.getWishlists();
 			if (list == null || list.isEmpty()) {
 				model.put("fail", "No Wishlist Found");
-				return "CustomerHome";
+				return "WishlistHome";
 			} else {
 				model.put("list", list);
 				return "ViewWishlist";
@@ -385,9 +385,9 @@ public class CustomerService {
 			Wishlist wishlist = wishlistRepository.findById(id).orElse(null);
 			if (wishlist.getProducts() == null || wishlist.getProducts().isEmpty()) {
 				model.put("fail", "No items present");
-				return "CustomerHome";
+				return "WishlistHome";
 			} else {
-				model.put("id",wishlist.getId());
+				model.put("id", wishlist.getId());
 				model.put("list", wishlist.getProducts());
 				return "ViewWishlistProducts";
 			}
@@ -424,7 +424,7 @@ public class CustomerService {
 			} else {
 				model.put("pass", "Item Already Exists in Wishlist");
 			}
-			return "CustomerHome";
+			return "WishlistHome";
 		}
 	}
 
@@ -440,7 +440,31 @@ public class CustomerService {
 			wishlistRepository.save(wishlist);
 
 			model.put("pass", "Item Removed from Wish list");
-			return "CustomerHome";
+			return "WishlistHome";
+		}
+	}
+
+	public String removeWishList(ModelMap model, HttpSession session, int wid) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Wishlist");
+			return "CustomerLogin";
+		} else {
+			Wishlist wishlist = wishlistRepository.findById(wid).orElse(null);
+			Wishlist wishlist2 = null;
+			for (Wishlist wishlist3 : customer.getWishlists()) {
+				if (wishlist3.getName().equals(wishlist.getName())) {
+					wishlist2 = wishlist3;
+				}
+			}
+
+			customer.getWishlists().remove(wishlist2);
+			session.setAttribute("customer", customerDao.save(customer));
+			wishlistRepository.delete(wishlist);
+
+			model.put("pass", "Wishlist deleted Success");
+			return "WishlistHome";
+
 		}
 	}
 }
