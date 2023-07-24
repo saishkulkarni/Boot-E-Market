@@ -11,11 +11,13 @@ import org.jsp.emarket.dto.Item;
 import org.jsp.emarket.dto.Payment;
 import org.jsp.emarket.dto.Product;
 import org.jsp.emarket.dto.ShoppingCart;
+import org.jsp.emarket.dto.ShoppingOrder;
 import org.jsp.emarket.dto.Wishlist;
 import org.jsp.emarket.helper.Login;
 import org.jsp.emarket.helper.SendMail;
 import org.jsp.emarket.repository.PaymentRepository;
 import org.jsp.emarket.repository.ProductRepository;
+import org.jsp.emarket.repository.ShoppingCartRepository;
 import org.jsp.emarket.repository.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,9 @@ public class CustomerService {
 	CustomerDao customerDao;
 
 	@Autowired
+	ShoppingCartRepository cartRepository;
+
+	@Autowired
 	ProductRepository productRepository;
 
 	@Autowired
@@ -37,9 +42,6 @@ public class CustomerService {
 
 	@Autowired
 	Item item;
-
-	@Autowired
-	ShoppingCart cart;
 
 	@Autowired
 	WishlistRepository wishlistRepository;
@@ -172,7 +174,7 @@ public class CustomerService {
 			if (product.getStock() >= 1) {
 				ShoppingCart cart = customer.getShoppingCart();
 				if (cart == null) {
-					cart = this.cart;
+					cart = new ShoppingCart();
 				}
 
 				List<Item> items = cart.getItems();
@@ -502,5 +504,69 @@ public class CustomerService {
 		}
 	}
 
-	
+	public String submitOrder(ModelMap model, HttpSession session, int pid, String address) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Wishlist");
+			return "CustomerLogin";
+		} else {
+			Payment payment = paymentRepository.findById(pid).orElse(null);
+			ShoppingOrder order = new ShoppingOrder();
+			order.setAddress(address);
+			order.setPaymentMode(payment.getName());
+			order.setDeliveryDate(LocalDate.now().plusDays(3));
+
+			ShoppingCart cart = customer.getShoppingCart();
+			if (cart == null) {
+				model.put("fail", "First add items");
+				return "CustomerHome";
+			}
+			if (cart.getItems() == null || cart.getItems().isEmpty()) {
+				model.put("fail", "First add items");
+				return "CustomerHome";
+			}
+			double total = 0;
+			for (Item item : cart.getItems()) {
+				total = total + item.getPrice();
+			}
+			order.setTotalPrice(total);
+			order.setItems(cart.getItems());
+			List<ShoppingOrder> list = customer.getOrders();
+			if (list == null) {
+				list = new ArrayList<>();
+			}
+			list.add(order);
+			customer.setOrders(list);
+			customer.setAddress(address);
+			cart.setItems(null);
+			customer.setShoppingCart(null);
+			Customer customer1 = customerDao.save(customer);
+			cartRepository.delete(cart);
+			session.removeAttribute("customer");
+			session.setAttribute("customer", customer1);
+
+			model.put("order", order);
+			model.put("customer", customer1);
+			model.put("pass", "Order Placed Success");
+			return "PrintRecipt";
+		}
+	}
+
+	public String viewOrders(ModelMap model, HttpSession session) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Wishlist");
+			return "CustomerLogin";
+		} else {
+			List<ShoppingOrder> list = customer.getOrders();
+			if (list == null || list.isEmpty()) {
+				model.put("fail", "No Orders Yet");
+				return "CustomerHome";
+			} else {
+				model.put("orders", customer.getOrders());
+				return "ViewOrders";
+			}
+		}
+	}
+
 }

@@ -11,7 +11,7 @@
 	<br>
 	<form action="/customer/sumbmitorder" method="post">
 		<input type="text" name="pid" value="${pid}" hidden="true"><br>
-		<textarea name="address" id="ta" rows="5" cols="30" disabled="disabled">${address}</textarea>
+		<textarea name="address" id="ta" rows="5" cols="30">${address}</textarea>
 		<button type="button" onclick="change()">Change Address</button>
 		<br>
 		<button>Place</button>

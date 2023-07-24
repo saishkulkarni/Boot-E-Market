@@ -3,6 +3,8 @@ package org.jsp.emarket.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +16,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Component
 public class ShoppingOrder {
 
 	@Id
@@ -21,7 +24,7 @@ public class ShoppingOrder {
 	int id;
 	private String paymentMode;
 	private String address;
-
+	private double totalPrice;
 	private LocalDate deliveryDate;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

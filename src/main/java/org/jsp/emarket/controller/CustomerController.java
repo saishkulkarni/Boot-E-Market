@@ -110,35 +110,42 @@ public class CustomerController {
 	public String viewWishlistProducts(@PathVariable int id, ModelMap model, HttpSession session) {
 		return customerService.viewWishlistProducts(id, model, session);
 	}
-	
+
 	@GetMapping("/wishlist-add/{wid}/{pid}")
-	public String addToWishList(@PathVariable int wid,@PathVariable int pid, ModelMap model, HttpSession session)
-	{
-		return customerService.addToWishList(model, session, wid,pid);
-	}
-	
-	@GetMapping("/wishlist-remove/{wid}/{pid}")
-	public String removeFromWishList(@PathVariable int wid,@PathVariable int pid, ModelMap model, HttpSession session)
-	{
-		return customerService.removeFromWishList(model, session, wid,pid);
-	}
-	
-	@GetMapping("/wishlist-delete/{wid}")
-	public String removeWishList(@PathVariable int wid, ModelMap model, HttpSession session)
-	{
-		return customerService.removeWishList(model, session, wid);
-	}
-	
-	@GetMapping("/placeorder")
-	public String checkPayment(ModelMap model,HttpSession session)
-	{
-		return customerService.checkPayment(model,session);
-	}
-	
-	@PostMapping("/placeorder")
-	public String checkAddress(ModelMap model,HttpSession session,@RequestParam int pid)
-	{
-		return customerService.checkAddress(model,session,pid);
+	public String addToWishList(@PathVariable int wid, @PathVariable int pid, ModelMap model, HttpSession session) {
+		return customerService.addToWishList(model, session, wid, pid);
 	}
 
+	@GetMapping("/wishlist-remove/{wid}/{pid}")
+	public String removeFromWishList(@PathVariable int wid, @PathVariable int pid, ModelMap model,
+			HttpSession session) {
+		return customerService.removeFromWishList(model, session, wid, pid);
+	}
+
+	@GetMapping("/wishlist-delete/{wid}")
+	public String removeWishList(@PathVariable int wid, ModelMap model, HttpSession session) {
+		return customerService.removeWishList(model, session, wid);
+	}
+
+	@GetMapping("/placeorder")
+	public String checkPayment(ModelMap model, HttpSession session) {
+		return customerService.checkPayment(model, session);
+	}
+
+	@PostMapping("/placeorder")
+	public String checkAddress(ModelMap model, HttpSession session, @RequestParam int pid) {
+		return customerService.checkAddress(model, session, pid);
+	}
+
+	@PostMapping("/sumbmitorder")
+	public String submitOrder(ModelMap model, HttpSession session, @RequestParam int pid,
+			@RequestParam String address) {
+		return customerService.submitOrder(model, session, pid, address);
+	}
+
+	@GetMapping("/orders-view")
+	public String viewOrder(ModelMap model, HttpSession session)
+	{
+		return customerService.viewOrders(model,session);
+	}
 }
