@@ -128,5 +128,17 @@ public class CustomerController {
 	{
 		return customerService.removeWishList(model, session, wid);
 	}
+	
+	@GetMapping("/placeorder")
+	public String checkPayment(ModelMap model,HttpSession session)
+	{
+		return customerService.checkPayment(model,session);
+	}
+	
+	@PostMapping("/placeorder")
+	public String checkAddress(ModelMap model,HttpSession session,@RequestParam int pid)
+	{
+		return customerService.checkAddress(model,session,pid);
+	}
 
 }

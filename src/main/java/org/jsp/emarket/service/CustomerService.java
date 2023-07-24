@@ -8,11 +8,13 @@ import java.util.Random;
 import org.jsp.emarket.dao.CustomerDao;
 import org.jsp.emarket.dto.Customer;
 import org.jsp.emarket.dto.Item;
+import org.jsp.emarket.dto.Payment;
 import org.jsp.emarket.dto.Product;
 import org.jsp.emarket.dto.ShoppingCart;
 import org.jsp.emarket.dto.Wishlist;
 import org.jsp.emarket.helper.Login;
 import org.jsp.emarket.helper.SendMail;
+import org.jsp.emarket.repository.PaymentRepository;
 import org.jsp.emarket.repository.ProductRepository;
 import org.jsp.emarket.repository.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class CustomerService {
 
 	@Autowired
 	WishlistRepository wishlistRepository;
+
+	@Autowired
+	PaymentRepository paymentRepository;
 
 	public String signup(Customer customer, String date, ModelMap model) {
 		customer.setDob(LocalDate.parse(date));
@@ -467,4 +472,35 @@ public class CustomerService {
 
 		}
 	}
+
+	public String checkPayment(ModelMap model, HttpSession session) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Wishlist");
+			return "CustomerLogin";
+		} else {
+			List<Payment> payments = paymentRepository.findAll();
+			if (payments.isEmpty()) {
+				model.put("fail", "Sorry you can not place order, There is an internal errortry after some time");
+				return "CustomerHome";
+			} else {
+				model.put("list", payments);
+				return "SelectPaymentOption";
+			}
+		}
+	}
+
+	public String checkAddress(ModelMap model, HttpSession session, int pid) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer == null) {
+			model.put("fail", "First Login to view Wishlist");
+			return "CustomerLogin";
+		} else {
+			model.put("address", customer.getAddress());
+			model.put("pid", pid);
+			return "OrderAddress";
+		}
+	}
+
+	
 }

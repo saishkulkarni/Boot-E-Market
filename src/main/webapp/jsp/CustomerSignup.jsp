@@ -21,7 +21,7 @@
 				type="radio" name="gender" value="male">Male <input
 				type="radio" name="gender" value="female">Female<br>
 			Address:
-			<textarea rows="5" cols="30"></textarea>
+			<textarea name="address" rows="5" cols="30"></textarea>
 			<br>
 			<button>Signup</button>
 			<button type="reset">Cancel</button>

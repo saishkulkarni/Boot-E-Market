@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-${pass} <br>
+${pass} ${fail}<br>
 <a href="/customer/wishlist-create/0"><button>Create Wishlist</button></a>
 <a href="/customer/wishlist-view"><button>View Wishlist</button></a>
 <a href="/jsp/CustomerHome.jsp"><button>Back</button></a>

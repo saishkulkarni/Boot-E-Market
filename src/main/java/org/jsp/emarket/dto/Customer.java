@@ -33,4 +33,7 @@ public class Customer {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	List<Wishlist> wishlists;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	List<ShoppingOrder> orders;
 }
